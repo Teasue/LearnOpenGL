@@ -41,12 +41,21 @@
     <ClInclude Include="filesystem.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fs.frag">
       <Filter>资源文件\shader</Filter>
     </None>
     <None Include="vs.vert">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="light.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="light.vert">
       <Filter>资源文件\shader</Filter>
     </None>
   </ItemGroup>

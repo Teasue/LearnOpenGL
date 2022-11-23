@@ -147,12 +147,15 @@
     <ClCompile Include="IncludeSth.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="filesystem.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fs.frag" />
+    <None Include="light.frag" />
+    <None Include="light.vert" />
     <None Include="vs.vert" />
   </ItemGroup>
   <ItemGroup>
