@@ -233,7 +233,7 @@ int main()
 
         ourShader.setMat4("view", view);
         ourShader.setMat4("projection", projection);
-
+		ourShader.setVec3("viewPos", camera.Position);
 
         glBindVertexArray(VAO);
         for (unsigned int i = 0; i < 10; i++)
