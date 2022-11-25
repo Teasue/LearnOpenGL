@@ -155,8 +155,12 @@ int main()
 
 	glm::vec3 lightColor;
 	
-	ourShader.setVec3("light.position", lightPos);
+
+    ourShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
 	ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+    ourShader.setFloat("light.constant", 1.0f);
+    ourShader.setFloat("light.linear", 0.09f);
+    ourShader.setFloat("light.quadratic", 0.032f);
 
 	ourShader.setInt("material.diffuse", 0);
 	ourShader.setInt("material.specular", 1);
@@ -197,8 +201,10 @@ int main()
         // render container
         ourShader.use();
 
-		ourShader.setVec3("light.ambient", ambientColor);
-		ourShader.setVec3("light.diffuse", diffuseColor);
+        ourShader.setVec3("light.position", camera.Position);
+        ourShader.setVec3("light.direction", camera.Front);
+		ourShader.setVec3("light.ambient", glm::vec3(0.1f));
+		ourShader.setVec3("light.diffuse", glm::vec3(0.8f));
 
   
         // transform mvp
@@ -218,7 +224,7 @@ int main()
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * (i + 1);
-            model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            //model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             ourShader.setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
