@@ -17,6 +17,7 @@ struct Vertex {
 struct Texture {
 	unsigned int id;
 	string type;
+	string path;
 };
 
 class Mesh {
@@ -52,8 +53,6 @@ public:
 			shader.setInt(MATERIAL + type, i);
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
-
-		glActiveTexture(GL_TEXTURE0);
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
