@@ -9,7 +9,7 @@
 class Model 
 {
 public:
-	Model(char* path) 
+	Model(string path)
 	{
 		loadModel(path);
 	};
@@ -107,6 +107,8 @@ private:
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
+
+		return Mesh(vertices, indices, textures);
 	};
 
 	vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, string name)
