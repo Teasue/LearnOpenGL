@@ -21,9 +21,9 @@ float deltaTime, lastTime = 0.0f;
 float lastX = SCR_WIDTH / 2, lastY = SCR_HEIGHT / 2;
 bool firstMouse = true;
 
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(1.0f, 5.0f, -22.0f));
 
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.2f, 10.0f, -10.0f);
 
 int main()
 {
@@ -61,9 +61,17 @@ int main()
     Shader ourShader("vs.vert", "fs.frag");
     Shader lightShader("light.vert", "light.frag");
 
-	Model modelObject("resources/objects/nanosuit/nanosuit.obj");
+	Model modelObject("resources/objects/hutao/hutao.obj");
 
     // light
+    ourShader.use();
+    ourShader.setVec3("pointLights[0].position", lightPos);
+    ourShader.setVec3("pointLights[0].ambient", glm::vec3(0.5f));
+    ourShader.setVec3("pointLights[0].diffuse", glm::vec3(0.0f, 1.0f, 0.0f));
+    ourShader.setVec3("pointLights[0].specular", glm::vec3(1.0f));
+    ourShader.setFloat("pointLights[0].constant", 1.0f);
+    ourShader.setFloat("pointLights[0].linear", 0.09f);
+    ourShader.setFloat("pointLights[0].quadratic", 0.032f);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -123,6 +131,9 @@ void processInput(GLFWwindow* window)
         camera.KeyBoradCallBack(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.KeyBoradCallBack(RIGHT, deltaTime);
+
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+        cout<< "CAMERA POSITION: " + to_string(camera.Position.x) +   "      " + to_string(camera.Position.y) + "      " + to_string(camera.Position.z);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -185,7 +196,7 @@ unsigned int loadTexture(char const* path)
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
+		cout << "Texture failed to load at path: " << path << std::endl;
 		stbi_image_free(data);
 	}
 
