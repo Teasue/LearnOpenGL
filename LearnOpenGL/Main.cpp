@@ -58,7 +58,7 @@ int main()
     }
 
     // build and compile our shader zprogram
-    Shader ourShader("vs.vert", "fs.frag");
+    Shader ourShader("vs.vert", "fs.frag", "gs.geom");
     Shader lightShader("light.vert", "light.frag");
 
 	Model modelObject("resources/objects/hutao/hutao.obj");
@@ -74,7 +74,6 @@ int main()
     ourShader.setFloat("pointLights[0].quadratic", 0.032f);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
     // render loop
     while (!glfwWindowShouldClose(window))
     {
