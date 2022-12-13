@@ -9,12 +9,16 @@
 class Model 
 {
 public:
-	Model(string path)
+	vector<Mesh> meshes;
+	vector<Texture> loadedTexture;
+
+
+	Model(string path, bool needFlip = true)
 	{
-		loadModel(path);
+		loadModel(path, needFlip);
 	};
 
-	void Draw(Shader shader)
+	void Draw(Shader &shader)
 	{
 		for (unsigned int i = 0; i < meshes.size(); i++)
 		{
@@ -23,14 +27,16 @@ public:
 	};
 
 private:
-	vector<Mesh> meshes;
 	string directory;
-	vector<Texture> loadedTexture;
 
-	void loadModel(string path)
+	void loadModel(string path, bool needFlip)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate );
+		unsigned int Flag = aiProcess_Triangulate;
+		if (needFlip)
+			Flag = Flag | aiProcess_FlipUVs;
+
+		const aiScene* scene = importer.ReadFile(path, Flag);
 		//const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -103,9 +109,9 @@ private:
 		{
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 			vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-			vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_sepcular");
-			
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+			vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_sepcular");
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 

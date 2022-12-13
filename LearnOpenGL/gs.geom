@@ -29,15 +29,15 @@ vec4 explode(vec4 position, vec3 normal)
 
 void main() {
     vec3 normal = GetNormal();
-    gl_Position = explode(gl_in[0].gl_Position, normal);
+    gl_Position = gl_in[0].gl_Position;
     TexCoords = gs_in[0].texCoords;
     Normal = gs_in[0].normal;
     EmitVertex();
-    gl_Position = explode(gl_in[1].gl_Position, normal);
+    gl_Position = gl_in[1].gl_Position;
     TexCoords = gs_in[1].texCoords;
     Normal = gs_in[1].normal;
     EmitVertex();
-    gl_Position = explode(gl_in[2].gl_Position, normal);
+    gl_Position = gl_in[2].gl_Position;
     TexCoords = gs_in[2].texCoords;
     Normal = gs_in[2].normal;
     EmitVertex();

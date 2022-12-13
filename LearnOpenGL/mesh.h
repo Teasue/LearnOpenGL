@@ -6,7 +6,6 @@ using namespace std;
 
 const string DIFFUSE_TYPE = "texture_diffuse";
 const string SPECULAR_TYPE = "texture_specular";
-const string MATERIAL = "material";
 
 struct Vertex {
 	glm::vec3 Position;
@@ -22,6 +21,7 @@ struct Texture {
 
 class Mesh {
 public:
+	unsigned int VAO;
 	vector<Vertex> vertices;
 	vector<unsigned int> indices;
 	vector<Texture> textures;
@@ -35,7 +35,7 @@ public:
 		Init();
 	};
 
-	void Draw(Shader shader) 
+	void Draw(Shader &shader) 
 	{
 		unsigned int diffuseIndex = 1;
 		unsigned int specularIndex = 1;
@@ -50,16 +50,18 @@ public:
 			else if (type == SPECULAR_TYPE)
 				index = to_string(specularIndex++);
 
-			shader.setInt(MATERIAL + type, i);
+			shader.setInt(type + index, i);
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
+
+		glActiveTexture(GL_TEXTURE0);
 	};
 private:
-	unsigned int VAO, VBO, EBO;
+	unsigned int VBO, EBO;
 
 	void Init()
 	{
@@ -75,12 +77,12 @@ private:
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
 		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
 		glBindVertexArray(0);
 	};
