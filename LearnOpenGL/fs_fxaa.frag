@@ -39,6 +39,7 @@ void main()
         float Filter = 2 * (N + E + S + W) + NE + NW + SE + SW;
         Filter = Filter / 12;
         Filter = abs(Filter -  M);
+        Filter = max(Filter / Contrast, 0);
         Filter = min(Filter / Contrast, 1);
         float PixelBlend = smoothstep(0, 1, Filter);
         PixelBlend = PixelBlend * PixelBlend;
@@ -55,21 +56,22 @@ void main()
         if (IsNegative) 
             PixelStep = -PixelStep;
 
-
         float OppositeM;
         if (IsHorizontal)
             OppositeM = IsNegative ? S : N;
         else
             OppositeM = IsNegative ? W : E;
 
+        float Gradient = IsNegative ? Negative : Positive;
         float EdgeLuma = (M + OppositeM) * 0.5;
+        float GradientThreshold = Gradient * 0.25;
         vec2 EdgePixel = TexCoords + PixelStep * 0.5;
         float NextPixelLumaDelta, EdgePositiveDistance, EdgeNegativeDistance;
         int i;
         for (i = 1; i <= 10; i++)
         {
             NextPixelLumaDelta = GetLuma(texture(screenTexture, EdgePixel + i * EdgeStep).rgb) - EdgeLuma;
-            if (abs(NextPixelLumaDelta) > EdgeLuma * 0.25)
+            if (abs(NextPixelLumaDelta) > GradientThreshold)
             {
                 EdgePositiveDistance = i * (IsHorizontal ? EdgeStep.x : EdgeStep.y);
                 break;
@@ -84,7 +86,7 @@ void main()
         for (i = 1; i <= 10; i++)
         {
              NextPixelLumaDelta = GetLuma(texture(screenTexture, EdgePixel - i * EdgeStep).rgb) - EdgeLuma;
-            if (abs(NextPixelLumaDelta) > EdgeLuma * 0.25)
+            if (abs(NextPixelLumaDelta) > GradientThreshold)
             {
                 EdgeNegativeDistance = i * (IsHorizontal ? EdgeStep.x : EdgeStep.y);
                 break;
